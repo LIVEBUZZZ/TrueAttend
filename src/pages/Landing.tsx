@@ -232,9 +232,9 @@ export default function Landing() {
                 <div className="grid grid-cols-2 gap-3">
                   {[
                     { k: 'Present', v: '4' },
-                    { k: 'Absent', v: '11' },
-                    { k: 'Rate', v: '27%' },
-                    { k: 'Roster', v: '15' },
+                    { k: 'Absent', v: '6' },
+                    { k: 'Rate', v: '40%' },
+                    { k: 'Roster', v: '10' },
                   ].map((s) => (
                     <div key={s.k} className="rounded-lg bg-slate-50 p-3">
                       <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
@@ -247,9 +247,9 @@ export default function Landing() {
               </div>
               <div className="space-y-2 border-t border-slate-200 p-5">
                 {[
-                  ['Marcus Chen', 'STU-1003'],
-                  ['Yuki Tanaka', 'STU-1006'],
-                  ['Aisha Bello', 'STU-1011'],
+                  ['Rohan Gupta', 'STU-1003'],
+                  ['Sneha Reddy', 'STU-1006'],
+                  ['Meera Nair', 'STU-1008'],
                 ].map(([name, id]) => (
                   <div
                     key={id}

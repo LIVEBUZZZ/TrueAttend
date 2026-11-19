@@ -2,8 +2,8 @@
 // TrueAttend — deterministic seed dataset
 // ---------------------------------------------------------------------------
 // Produces a fully populated database so the app is usable immediately with
-// zero manual setup: 3 courses, 15 students, attendance history, an active
-// live session, an audit trail and open correction disputes.
+// zero manual setup: 3 courses, 4 instructors, 10 students, attendance
+// history, an active live session, an audit trail and open correction disputes.
 // ---------------------------------------------------------------------------
 
 import type {
@@ -17,7 +17,7 @@ import type {
   VerificationMode,
 } from '../types';
 
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
 export const DEMO_LIVE_SESSION_ID = 'ses_live_cs201';
 export const DEMO_STUDENT_ID = 'usr_student_demo';
 export const DEMO_INSTRUCTOR_ID = 'usr_instructor_demo';
@@ -51,21 +51,58 @@ const AVATAR_PALETTE = [
 ];
 
 const STUDENT_DEFS: Array<{ name: string; email: string; studentId: string; pin: string }> = [
-  { name: 'Alex Rivera', email: 'alex.rivera@student.trueattend.app', studentId: 'STU-1001', pin: '2468' },
+  { name: 'Aditya Verma', email: 'aditya.verma@student.trueattend.app', studentId: 'STU-1001', pin: '2468' },
   { name: 'Priya Sharma', email: 'priya.sharma@student.trueattend.app', studentId: 'STU-1002', pin: '3141' },
-  { name: 'Marcus Chen', email: 'marcus.chen@student.trueattend.app', studentId: 'STU-1003', pin: '5927' },
-  { name: 'Sofia Almeida', email: 'sofia.almeida@student.trueattend.app', studentId: 'STU-1004', pin: '1042' },
-  { name: 'Daniel Okafor', email: 'daniel.okafor@student.trueattend.app', studentId: 'STU-1005', pin: '7781' },
-  { name: 'Yuki Tanaka', email: 'yuki.tanaka@student.trueattend.app', studentId: 'STU-1006', pin: '8352' },
-  { name: 'Fatima Noor', email: 'fatima.noor@student.trueattend.app', studentId: 'STU-1007', pin: '6619' },
-  { name: "Liam O'Brien", email: 'liam.obrien@student.trueattend.app', studentId: 'STU-1008', pin: '4407' },
-  { name: 'Zoe Martin', email: 'zoe.martin@student.trueattend.app', studentId: 'STU-1009', pin: '9283' },
-  { name: 'Noah Kaplan', email: 'noah.kaplan@student.trueattend.app', studentId: 'STU-1010', pin: '2716' },
-  { name: 'Aisha Bello', email: 'aisha.bello@student.trueattend.app', studentId: 'STU-1011', pin: '5503' },
-  { name: 'Tomas Silva', email: 'tomas.silva@student.trueattend.app', studentId: 'STU-1012', pin: '3894' },
-  { name: 'Hannah Wright', email: 'hannah.wright@student.trueattend.app', studentId: 'STU-1013', pin: '7128' },
-  { name: 'Raj Patel', email: 'raj.patel@student.trueattend.app', studentId: 'STU-1014', pin: '9046' },
-  { name: 'Elena Petrova', email: 'elena.petrova@student.trueattend.app', studentId: 'STU-1015', pin: '6335' },
+  { name: 'Rohan Gupta', email: 'rohan.gupta@student.trueattend.app', studentId: 'STU-1003', pin: '5927' },
+  { name: 'Ananya Iyer', email: 'ananya.iyer@student.trueattend.app', studentId: 'STU-1004', pin: '1042' },
+  { name: 'Karan Mehta', email: 'karan.mehta@student.trueattend.app', studentId: 'STU-1005', pin: '7781' },
+  { name: 'Sneha Reddy', email: 'sneha.reddy@student.trueattend.app', studentId: 'STU-1006', pin: '8352' },
+  { name: 'Vikram Singh', email: 'vikram.singh@student.trueattend.app', studentId: 'STU-1007', pin: '6619' },
+  { name: 'Meera Nair', email: 'meera.nair@student.trueattend.app', studentId: 'STU-1008', pin: '4407' },
+  { name: 'Arjun Desai', email: 'arjun.desai@student.trueattend.app', studentId: 'STU-1009', pin: '9283' },
+  { name: 'Kavya Pillai', email: 'kavya.pillai@student.trueattend.app', studentId: 'STU-1010', pin: '2716' },
+];
+
+const INSTRUCTOR_DEFS: Array<{
+  id: string;
+  name: string;
+  email: string;
+  title: string;
+  department: string;
+  avatarColor: string;
+}> = [
+  {
+    id: DEMO_INSTRUCTOR_ID,
+    name: 'Dr. Rajesh Kumar',
+    email: 'instructor@trueattend.app',
+    title: 'Professor & Head of Department',
+    department: 'Computer Science',
+    avatarColor: '#4F46E5',
+  },
+  {
+    id: 'usr_instructor_2',
+    name: 'Prof. Sunita Deshmukh',
+    email: 'sunita.deshmukh@trueattend.app',
+    title: 'Associate Professor',
+    department: 'Computer Science',
+    avatarColor: '#10B981',
+  },
+  {
+    id: 'usr_instructor_3',
+    name: 'Dr. Arun Kapoor',
+    email: 'arun.kapoor@trueattend.app',
+    title: 'Assistant Professor',
+    department: 'Information Technology',
+    avatarColor: '#F59E0B',
+  },
+  {
+    id: 'usr_instructor_4',
+    name: 'Prof. Nisha Raghavan',
+    email: 'nisha.raghavan@trueattend.app',
+    title: 'Assistant Professor',
+    department: 'Computer Science',
+    avatarColor: '#8B5CF6',
+  },
 ];
 
 const MODES: VerificationMode[] = ['qr_token', 'credentials', 'biometric_check'];
@@ -75,22 +112,23 @@ export function buildSeedDatabase(): Database {
   const rand = mulberry32(20260120);
 
   // --- profiles -----------------------------------------------------------
-  const instructor: Profile = {
-    id: DEMO_INSTRUCTOR_ID,
-    name: 'Dr. Amara Okafor',
-    email: 'instructor@trueattend.app',
+  const instructors: Profile[] = INSTRUCTOR_DEFS.map((def) => ({
+    id: def.id,
+    name: def.name,
+    email: def.email,
     role: 'instructor',
-    department: 'Computer Science',
-    title: 'Associate Professor',
-    avatarColor: '#4F46E5',
-  };
+    department: def.department,
+    title: def.title,
+    avatarColor: def.avatarColor,
+  }));
+  const instructor = instructors[0]; // Dr. Rajesh Kumar — owns every course below
 
   const studentIds = STUDENT_DEFS.map((_, i) => (i === 0 ? DEMO_STUDENT_ID : `usr_stu_${1001 + i}`));
 
   // --- courses ------------------------------------------------------------
-  const cs201Students = studentIds; // all 15
-  const cs330Students = studentIds.slice(0, 12);
-  const cs410Students = studentIds.slice(0, 8);
+  const cs201Students = studentIds; // all 10
+  const cs330Students = studentIds.slice(0, 8);
+  const cs410Students = studentIds.slice(0, 6);
 
   const courses: Course[] = [
     {
@@ -215,7 +253,7 @@ export function buildSeedDatabase(): Database {
   sessions.push(liveSession);
 
   // A handful of students already checked in to the live session.
-  ['STU-1003', 'STU-1006', 'STU-1011', 'STU-1015'].forEach((sid, i) => {
+  ['STU-1003', 'STU-1006', 'STU-1008', 'STU-1010'].forEach((sid, i) => {
     const studentId = students.find((s) => s.studentId === sid)!.id;
     addRecord(
       studentId,
@@ -266,7 +304,7 @@ export function buildSeedDatabase(): Database {
   });
   pushAudit({
     actorId: DEMO_STUDENT_ID,
-    actorName: 'Alex Rivera',
+    actorName: 'Aditya Verma',
     actorRole: 'student',
     action: 'attendance_verified',
     targetType: 'attendance',
@@ -297,7 +335,7 @@ export function buildSeedDatabase(): Database {
     {
       id: 'dsp_1',
       studentId: DEMO_STUDENT_ID,
-      studentName: 'Alex Rivera',
+      studentName: 'Aditya Verma',
       sessionId: targetSession.id,
       courseId: 'crs_cs201',
       attendanceRecordId: demoRecord?.id,
@@ -322,7 +360,7 @@ export function buildSeedDatabase(): Database {
 
   return {
     version: DB_VERSION,
-    profiles: [instructor, ...students],
+    profiles: [...instructors, ...students],
     courses,
     sessions,
     attendanceRecords,

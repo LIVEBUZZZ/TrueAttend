@@ -41,7 +41,7 @@ export default function Login() {
   // Keep the email field in sync with the selected role's demo account.
   useEffect(() => {
     setEmail(
-      role === 'student' ? 'alex.rivera@student.trueattend.app' : 'instructor@trueattend.app',
+      role === 'student' ? 'aditya.verma@student.trueattend.app' : 'instructor@trueattend.app',
     );
     setError(null);
   }, [role]);
@@ -146,7 +146,7 @@ export default function Login() {
                 </span>
                 <span className="text-left leading-tight">
                   <span className="block text-sm font-semibold text-slate-900">Demo Student</span>
-                  <span className="block text-[11px] font-normal text-slate-500">Alex Rivera</span>
+                  <span className="block text-[11px] font-normal text-slate-500">Aditya Verma</span>
                 </span>
               </Button>
               <Button variant="outline" className="justify-start" onClick={() => demo('instructor')}>
@@ -155,7 +155,7 @@ export default function Login() {
                 </span>
                 <span className="text-left leading-tight">
                   <span className="block text-sm font-semibold text-slate-900">Demo Instructor</span>
-                  <span className="block text-[11px] font-normal text-slate-500">Dr. Amara Okafor</span>
+                  <span className="block text-[11px] font-normal text-slate-500">Dr. Rajesh Kumar</span>
                 </span>
               </Button>
             </div>
